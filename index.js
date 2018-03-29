@@ -4,9 +4,6 @@ var ses = new aws.SES({
    region: 'us-east-1'
 });
 var ddb = new aws.DynamoDB();
-//var data = "asdf";
-//var crypto = require('crypto');
-//crypto.createHash('md5').update(data).digest("hex");
 
 exports.handler = function(event, context, callback) {
     console.log("Incoming: ", event);
@@ -55,7 +52,8 @@ exports.handler = function(event, context, callback) {
           ddb.putItem(itemParams, function(err) {
           if(err) console.log(err);
           else{
-            var url=url+"/reset?email="+useremail+"&token="+ttl.toString();
+            url=url+"/reset?email="+useremail+"&token="+ttl.toString();
+            console.log("url:"+url);
             var eParams = {
               Destination: {
                   ToAddresses: [useremail]
@@ -64,7 +62,7 @@ exports.handler = function(event, context, callback) {
                   Body: {
                       Html: {
                           Charset: 'UTF-8',
-                          Data: 'Click Here:<a href=\"'+url+'\" target=\"_blank\">Reset Link</a>'
+                          Data: '<html><body><b>Click Here:<a href=\"http://'+url+'\" target=\"_blank\">Reset Link</a></b></body></html>'
                       }
                   },
                   Subject: {
@@ -116,7 +114,8 @@ exports.handler = function(event, context, callback) {
               ddb.putItem(itemParams, function(err) {
               if(err) console.log(err);
               else{
-                var url=url+"/reset?email="+useremail+"&token="+ttl.toString();
+                 url=url+"/reset?email="+useremail+"&token="+ttl.toString();
+                 console.log("url:"+url);
                   var eParams = {
                     Destination: {
                         ToAddresses: [useremail]
@@ -125,7 +124,7 @@ exports.handler = function(event, context, callback) {
                         Body: {
                             Html: {
                                 Charset: 'UTF-8',
-                                Data: 'Click Here:<a href=\"'+url+'\" target=\"_blank\">Reset Link</a>'
+                                Data: '<html><body><b>Click Here:<a href=\"http://'+url+'\" target=\"_blank\">Reset Link</a></b></body></html>'
                             }
                         },
                         Subject: {
